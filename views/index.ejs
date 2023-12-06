@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <img src="https://onlineclosetblob.blob.core.windows.net/online-closet-capstone/titleName.png" alt="Enline Armoire" width="500" height="auto" class="center">
+    <%- include('header.ejs') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <style>
+      body {
+            background-color: seashell;
+            font-family: Garamond, serif;
+         }
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+      }
+    </style>
+  
+  </head>
+  <body>
+
+<div class="jumbotron">
+  <h2 class="display-4">Bonjour mon ami, </h2>
+  <p class="lead">Please click on what you'd like to do</p>
+  <hr class="my-4">
+  
+  <!--A simple jumbotron with buttons. My home page is uninteresting because users are unlikely to spend time here-->
+  <p class="lead">
+    <div class="row-sm-3">
+    <a class="btn btn-light btn-lg btn-block" href="/upload" role="button">Add Item</a>
+    <a class="btn btn-light btn-lg btn-block" href="/view-closet" role="button">View Closet</a>
+    <a class="btn btn-light btn-lg btn-block" href="/create-outfit" role="button">Add Outfit</a>
+    <a class="btn btn-light btn-lg btn-block" href="/view-outfits" role="button">View Outfits</a>
+    <a class="btn btn-light btn-lg btn-block" href="/sell-item" role="button">View Selling</a>
+    <a class="btn btn-light btn-lg btn-block" href="/buying-item" role="button">View Buying</a>
+  </p>
+    </div>
+</div>
+
+<!--
+This script places a badge on your repl's full-browser view back to your repl's cover
+page. Try various colors for the theme: dark, light, red, orange, yellow, lime, green,
+teal, blue, blurple, magenta, pink!
+-->
+
+  </body>
+</html>

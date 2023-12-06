@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('header.ejs') %>
+        <style>
+        body {
+            background-color: seashell;
+            font-family: Garamond, serif;
+         }
+        </style>
+
+        <title>Add Buying</title>
+        <h1 align="center">Saving Buying Information</h1>
+        <h6 style="color:blue">This information is non-editable. If you have already added a link, the new link and date will not be added or updated. </h6>
+        <h6 style="color:blue"> If you are trying to make changes to the link or date, please delete the buying information through the "View Buying" page and re-add a date and link through "View Closet" page</h6>
+        <h6 style="color:blueviolet">Please keep note of the date - all items in buying will notify on the same day. </h6>
+
+        
+
+    </head>
+
+    <body>
+        <!-- This is a basic user input form -->
+        <div class="item-details">
+            <a href="/view-closet">
+                <button>Return to View Closet</button>
+            </a> <br>
+
+            <br>
+
+            <h1><%= data.title %></h1>
+            <img src="<%= data.image_link %>"" alt ="clothing item" width="400" height="auto"> <br>
+
+            <form action="/upload/add-buying/<%=data.clothingID%>" method="POST">
+                
+                <br>
+                <h5><b> Adding Buying Information</b></h5>
+                <label for="prodLink">Add Link or Store name:</label>
+                <input type="text" id="prodLink" name="prodLink" maxlength="100" placeholder="Alhambra - Seattle Boutique" required> <br>
+
+                <br>
+
+                <label for="date">Date to be Notified:</label> 
+                <input type="text" id="date" name="date" maxlength="10" placeholder="2024-01-01" required>
+                <h6 style="color:blue">Please enter as YYYY-MM-DD</h6>
+                <h6 style="color:blueviolet">Once again, please enter the same date as the other buying items, they will be notified all on the same date.</h6>
+
+                <button type="submit">Upload</button>
+            </form>
+            
+       
+
+    </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('header.ejs') %>
+        <title>View Closet</title>
+        <!-- Very basic set up for displaying database information-->
+        <!-- It uses flex box in a 3 items per row setup.-->
+        <!-- Users can click view item to see item information, edit the item information-->
+        <!-- Or delete the item. In this case, a popup appears asking the user to confirm, just in case they accidentally clicked delete-->
+        <style>
+            H1 { text-align: center }
+
+            .col-auto{
+               display: block;
+               margin: auto;
+               width: 33%;
+               border: 1px solid #000000;
+           }
+
+           .row{
+               display: flex;
+               flex-wrap: wrap;
+               margin: 0 auto;
+               width: 100%;
+               flex-direction: row;
+               justify-content: center;
+           }  
+
+           img {
+               width: 300px;
+               height: 300px;
+               object-fit: contain;
+           }
+
+           body {
+            background-color: seashell;
+            font-family: Garamond, serif;
+         }
+       </style>
+    </head>
+
+    
+
+    <body>
+        <h1>View Closet</h1>
+       
+
+        <div class="container">
+            <div class="row">
+                <% if (displayItem.length !== 0) { %>
+                    <% displayItem.forEach(function(data, index) { %>
+                        <div class="col-auto">
+                            
+                            <img src="<%= data.image_link %>"" alt ="clothing item">
+                            
+                            <p><b>Title:</b> <%= data.title %></p>
+                            <p><b>Size:</b> <%= data.size %></p>
+                            <a href="/view-closet/view-item/<%= data.clothingID %>">
+                                <button>View</button>
+                            </a>
+                            <a href="/upload/edit/<%= data.clothingID %>">
+                                <button>Edit</button>
+                            </a>
+                            <a href="/upload/delete/<%= data.clothingID %>" onclick="return confirm('Are you sure you want to delete this item?');">
+                                <button>Delete</button>
+                            </a>
+
+                            <% if (data.buying == 1) { %>
+                                <a href="/upload/add-buying/<%= data.clothingID %>">
+                                    <button>Add Link</button>
+                                </a>
+                            <% } %>
+
+                        </div>
+                        <% }); %>
+    
+    
+                    <% } else { %>
+                    <p>No Data Found</p>
+                  <% } %>
+            </div>
+        </div>
+
+       
+
+    </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('header.ejs') %>
+        <title>Sell item</title>
+        <style>
+             .col-auto{
+                display: block;
+                margin: auto;
+                width: 33%;
+                border: 1px solid #000000;
+            }
+
+            .row{
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0 auto;
+                width: 100%;
+                flex-direction: row;
+                justify-content: center;
+            }  
+
+            img {
+                width: 300px;
+                height: 300px;
+                object-fit: contain;
+            }
+
+            /*.row {
+                display: inline-grid;
+                width:80%;
+                background-color: white;
+                justify-content: center;
+                align-items: center;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .col-auto {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .col-auto img{
+                width: 100%
+            }*/
+
+        </style>
+    </head>
+
+    <body>
+        <!--Sell item just displays the items for sale in the same format as view closet-->
+        <!--You can access view and edit item, but not delete-->
+        <!--This is in case someone wanted to delete the item from selling and got confused-->
+        <!--Since selling isn't its own table, all you have to do to "delete" is edit the selling drop down-->
+        <!-- So I added a disclaimer-->
+        <h1 align="center">Items for Sale</h1>
+        <h6 style="color:blue">If you wish to delete the item from the selling list and keep the item in your closet, change the 'Selling' selection in 'View Item'</h6>
+        <h6 style="color:blue"> If you wish to to delete the item from the closet, please delete through 'View Item' or 'View Closet'</h6> <br>
+        <div class="container">
+            <div class="row">
+            <% if (displayItem.length !== 0) { %>
+                <% displayItem.forEach(function(data, index) { %>
+                    <div class="col-auto">
+                        
+                        <img src="<%= data.image_link %>"" alt ="clothing item">
+                        
+                        <p><b><%= data.title %></b></p>
+                        <p><b><%= data.size %></b></p>
+                        <a href="/view-closet/view-item/<%= data.clothingID %>">
+                            <button>View</button>
+                        </a>
+
+                        <a href="/upload/edit/<%= data.clothingID %>">
+                            <button>Edit</button>
+                            </a> 
+                            
+                        </div>
+                    <% }); %>
+
+
+                <% } else { %>
+                <p>No Data Found</p>
+              <% } %>
+            </div>
+
+        </div>
+    </body>
+</html>

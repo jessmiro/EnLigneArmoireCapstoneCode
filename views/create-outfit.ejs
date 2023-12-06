@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <%- include('header.ejs') %>
+        <h1 align="center"> Create Outfit </h1>
+
+        <style>
+        #div1 {
+            width: 350px;
+            height: 350px;
+            padding: 10px;
+            color:whitesmoke;
+            border: 1px solid #aaaaaa;
+                }
+
+        .column {
+            float: left;
+          /* Should be removed. Only for demonstration */
+        }
+
+        .total:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .left {
+            float: left;
+            width: 60%;
+            }
+
+        .right {
+            width: 40%;
+            padding: 20px;
+            }
+
+            .col-auto{
+               display: block;
+               margin: auto;
+               width: 20%;
+               border: 1px solid #000000;
+           }
+
+           .row{
+               display: flex;
+               flex-wrap: wrap;
+               margin: 0 auto;
+               width: 100%;
+               flex-direction: row;
+               justify-content: center;
+           }  
+
+           img {
+               width: 100px;
+               height: 100px;
+               object-fit: contain;
+           }
+           </style>
+
+            <script>
+                // drag and drop functionality is from
+                // https://www.w3schools.com/html/html5_draganddrop.asp
+                function allowDrop(ev) {
+                ev.preventDefault();
+                }
+                
+                function drag(ev) {
+                ev.dataTransfer.setData("text", ev.target.id);
+                }
+                
+                function drop(ev) {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                ev.target.appendChild(document.getElementById(data));
+                }
+                </script>
+</head>
+        
+    <body>
+        <div class = "total">
+            <!-- This is a mixture of flex box, drag and drop, and user input-->
+            <!--Flex box shows the image that is now draggable to the drag and drop box, and it's a lot smaller to all fit in one page-->
+            <!--We also have a left and right side of the screen. I couldn't get it to be farther apart for some reason-->
+            <!-- But it just has dragable items on the left and creating the outfit on the right-->
+        
+        <div class = "container">
+            <br>
+            <br>
+            <br>
+            <h5><b>Items in closet:</b></h5>
+            <div class = "column left">
+            <div class="row">
+                <% if (displayItem.length !== 0) { %>
+                    <% displayItem.forEach(function(data, index) { %>
+
+                        <div class="col-auto">
+                        <img id="<%=data.clothingID%>" img src="<%= data.image_link %>"" alt ="clothing item" draggable="true" ondragstart="drag(event)">
+                        <p><%= data.clothingID%> </p>
+                    </div>
+                <% }); %>
+                <% } else { %>
+                <p>No Data Found</p>
+              <% } %>
+            </div>
+            </div>
+            </div>
+
+            <div class = "column right">
+                <h5> <b>Drag to Brainstorm Outfits</b> </h5>
+                <h6 style="color:blue">This feature only support drag and drop - items in here are not saved in any way.</h6>
+                <h6 style="color:blue">If you wish to remove an item, please refresh. Please note that it will remove all items in the drag and drop box</h6>
+                <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div> <br>
+            
+
+            <form action="/create-outfit" method="POST">
+                
+                <h5><b>Add Outfit</b></h5>
+
+                <label for="addOutfit">Select the Outfit:</label>
+                <select name="addOutfit" id="addOutfit">
+                    <option value=""> Select Outfit To Add To </option>
+                    <option value="0"> New Outfit </option>
+                    <option value="1"> Pre-Existing Outfit </option>
+                    </select> <br>
+   
+                    <!-- Not required since the user might use a new outfit instead-->
+                    <label for="outfitID" >Enter Outfit ID You'd Like to Add to:</label> 
+                    <input type="text" id="outfitID" name="outfitID" placeholder="100000" maxlength="6" > <br>
+                    <h6 style="color:blue"> To find your OutfitID, please visit the View Outfits page and copy the correct ID</h6> <br>
+
+                    <label for="outfitTitle">Outfit Title:</label>
+                    <input type="text" id="outfitTitle" name="outfitTitle" placeholder="New Outfit" maxlength="50" > <br>
+
+                    <label for="description">Description:</label> <br>
+                    <textarea rows="4" cols="50" name="description" maxlength="250" placeholder="This is a description of the outfit"></textarea> <br>
+
+                    <label for="clothingOutfitID">Enter Clothing ID to Add to Outfit:</label> 
+                    <input type="text" id="clothingOutfitID" name="clothingOutfitID" placeholder="100000" maxlength="6" > <br>
+                    <h6 style="color:blue"> clothingID is 6 digit number below pictures on the left side of the screen. </h6>
+
+
+                    <label for="outfitTag">Outfit Tag:</label>
+                    <input type="text" id="outfitTag" name="outfitTag" placeholder="Winter" maxlength="50" > <br>
+                    
+                    <button type="submit">Upload</button>
+            </form>
+        </div>
+
+        </div>
+
+    </body>

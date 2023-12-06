@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Same functionality as upload but has pre inserted values to user input section-->
+        <%- include('header.ejs') %>
+        <title>Edit item</title>
+        <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+
+    <style>
+        body {
+        background-color: seashell;
+        font-family: Garamond, serif;
+     }
+        .column {
+          float: left;
+          width: 50%;
+          padding: 20px; 
+          /* Should be removed. Only for demonstration */
+        }
+    
+        /* Clear floats after the columns */
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+      </style>
+
+    <body>
+        <!--Fix this part ?-->
+        <h1 align="center">Edit Item</h1>
+        <!--<img src="https://closetimages.s3.us-east-2.amazonaws.com/img_1_1696753697426.jpg"" alt ="clothing item" width="400" height="auto">-->
+        
+        
+              <!--Upload image-->
+        <!--<h2>File Upload</h2>-->
+        <form action="/upload/edit/<%=data.clothingID%>" method="POST"> <!--POST-->
+            <div class="row">
+                <div class="column">
+                  <h5>Item Information</h5>
+                  <h6>Please enter missing information regarding your garment</h6><br>
+                  
+            <input type="text" name="userID" id="userID" value="<%= data.userID %>" class="d-none">
+
+
+            <!--Edit is pretty much the same as upload with some exceptions-->
+            <!--The user cannot upload a new image because we can't upload a photo with the same name to s3-->
+            <label for="file"> Upload Image:</label>
+            <input type="file" name="file" disabled> <br>
+            <h6 style="color:red">Unable to edit images. Please create new item if you wish to use a new image.</h6>
+            <img src="<%=data.image_link%>" alt = "clothing item" width = "200" height="auto"> <br>
+            <input type="text" name="img_link" id="img_link" value="<%= data.image_link %>" class="d-none">
+            <br>
+
+            <!--<h5>Here's data title: </h5>
+            <h5><%= data.title %></h5>-->
+
+                  <!--User input item title-->
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" maxlength="50" value="<%= data.title%>" required> <br>
+
+      <!--User input item brand-->
+      <label for="brand">Brand:</label>
+      <input type="text" id="brand" name="brand" value="<%= data.brand%>" maxlength="60" required> <br>
+
+      
+      <!-- User input item size -->
+      <label for="size">Size:</label>
+      <input type="text" id="size" name="size" value="<%= data.size%>" maxlength="8" required> <br>
+
+      <!-- drop down menu item special size -->
+      <!-- My original plan was to send the items from the database to the drop down menus. Unfortunately this seemed pretty difficult (especially when adding it back to the database due to my "id, name" format in the database) and it would cause issues with the dependent tables. Instead, I did it manually to make it easier. -->
+      <label for="special_size">Special Size:</label>
+      <select name="special_size" id="special_size">
+        <option value=""> Select Special Size </option>
+        <option value="2"> Curvy </option>
+        <option value="3"> Maternity </option>
+        <option value="0"> Petite </option>
+        <option value="1"> Tall </option>
+        <option value="4"> Wide (Shoes) </option>
+        <option value="5"> Narrow (Shoes) </option>
+        <option value="6"> N/A </option>
+      </select> <br>
+
+      <label for="description">Description:</label> <br>
+      <textarea rows="4" cols="50" name="description"
+        maxlength="250" required><%= data.description%></textarea> <br>
+
+      
+      <!-- Drop down menu input item clothing type -->
+      <label for="clothing_type"> Clothing Type: </label>
+      <select name="clothing_type" id="clothing_type" onchange="enableSubtype(this)">
+        <option value="sel"> Select Type </option>
+        <option value="4"> Accessories </option>
+        <option value="1"> Bottoms </option>
+        <option value="2"> One Pieces </option>
+        <option value="3"> Shoes </option>
+        <option value="0"> Tops </option>
+      </select> <br>
+
+      <!-- Drop down menu input item clothing subtype -->
+      <h6 style="color:blue; font-size:75%">Please reselect subtype by clicking 'select type' option and then select original clothing type drop down menu</h6>
+
+      <label for="clothing_subtype"> Clothing Subtype: </label>
+      <select name="clothing_subtype5" id="tops" class="d-none">
+        <option value=""> Select Subtype </option>
+        <option value="10"> Bathing Top </option>
+        <option value="0"> Blouse </option>
+        <option value="6"> Bodysuit </option>
+        <option value="1"> Button Down </option>
+        <option value="9"> Coat </option>
+        <option value="8"> Jacket </option>
+        <option value="3"> Long Sleeve Tee </option>
+        <option value="2"> Short Sleeve Tee </option>
+        <option value="4"> Sweater </option>
+        <option value="7"> Sweatshirt </option>
+        <option value="5"> Tank Top </option>
+      </select>
+
+      <!--<label for="clothing_subtype"> Clothing Subtype: </label>-->
+      <select name="clothing_subtype4" id="bottoms" class="d-none">
+        <option value=""> Select Subtype </option>
+        <option value="15"> Bathing Bottom </option>
+        <option value="14"> Jeans </option>
+        <option value="13"> Leggings </option>
+        <option value="12"> Pants </option>
+        <option value="11"> Skirt </option>
+      </select>
+
+      <!--<label for="clothing_subtype"> Clothing Subtype: </label>-->
+      <select name="clothing_subtype3" id="one_piece" class="d-none">
+        <option value=""> Select Subtype </option>
+        <option value="16"> Dress </option>
+        <option value="18"> Jumpsuit </option>
+        <option value="17"> Overalls </option>
+        <option value="19"> Swimsuit </option>
+      </select>
+
+      <!--<label for="clothing_subtype"> Clothing Subtype: </label>-->
+      <select name="clothing_subtype2" id="shoes" class="d-none">
+        <option value=""> Select Subtype </option>
+        <option value="22"> Boots </option>
+        <option value="25"> Dress Shoes </option>
+        <option value="20"> Flats </option>
+        <option value="23"> Heels </option>
+        <option value="24"> Loafers </option>
+        <option value="26"> Sandals </option>
+        <option value="27"> Slippers </option>
+        <option value="21"> Sneakers </option>
+      </select>
+
+      <!--<label for="clothing_subtype"> Clothing Subtype: </label>-->
+      <select name="clothing_subtype1" id="accessories" class="d-none">
+        <option value=""> Select Subtype </option>
+        <option value="36"> Bag </option>
+        <option value="28"> Belt </option>
+        <option value="31"> Bracelet </option>
+        <option value="29"> Earrings </option>
+        <option value="33"> Hair Accessories </option>
+        <option value="37"> Hat </option>
+        <option value="30"> Necklace </option>
+        <option value="32"> Ring </option>
+        <option value="35"> Scarf </option>
+        <option value="34"> Tie </option>
+        <option value="38"> Other </option>
+      </select> <br>
+
+      
+      <!-- drop down menu input item gender -->
+      <label for="gender"> Gender: </label>
+      <select name="gender" id="gender">
+        <option value=""> Select Gender </option>
+        <option value="1"> Mens </option>
+        <option value="0"> Womens </option>
+        <option value="2"> N/A </option>
+      </select> <br>
+
+      <!-- Drop down menu input item color -->
+      <label for="color"> Color: </label>
+      <select name="color" id="color">
+        <option value=""> Select Color </option>
+        <option value="1"> Black </option>
+        <option value="7"> Blue </option>
+        <option value="6"> Green </option>
+        <option value="2"> Grey </option>
+        <option value="4"> Orange </option>
+        <option value="10"> Patterned </option>
+        <option value="9"> Pink </option>
+        <option value="8"> Purple </option>
+        <option value="3"> Red </option>
+        <option value="0"> White </option>
+        <option value="5"> Yellow </option>
+      </select> <br>
+
+      
+      <!-- drop down menu input item selling check -->
+      <label for="selling"> Are you selling this item ? : </label>
+      <select name="selling" id="selling">
+        <option value=""> Select Answer </option>
+        <option value="1"> Yes </option>
+        <option value="0"> No </option>
+      </select> <br>
+
+      
+      <!-- drop down menu input item buying check -->
+      <label for="buying"> Is this an item you want to buy ? : </label>
+      <select name="buying" id="buying">
+        <option value=""> Select Answer </option>
+        <option value="1"> Yes </option>
+        <option value="0"> No </option>
+      </select> <br> <br>
+
+      <h5> <b>Create Tag</b></h5>
+      <h6>Please enter a useful tag for filtering purposes - you'll be able to create more tags on the view item page
+      </h6>
+      <h6>Ex. Winter, Goth, Evening, Cosplay, N/A etc.</h6>
+      <!-- User input item tag -->
+      <label for="tag">Tag:</label>
+      <input type="text" id="tag" name="tag" value="<%= data.tag%>" maxlength="50" required><br>
+
+      <!-- <br>
+      // Tag system 
+      <h5>Create Tag</h5>
+      <h6>Please enter a useful tag for filtering purposes - you'll be able to create more tags on the view item page
+      </h6>
+      <h6>Ex. Winter, Goth, Evening, Cosplay, N/A etc.</h6>
+      //User input item tag 
+      <label for="tag">Tag:</label>
+      <input type="text" id="tag" name="tag" placeholder="Winter"><br> -->
+
+    </div>
+
+    <div class="column">
+      <!-- measurements system -->
+      <!-- I wanted to keep it in the same place as the general input since it could be modified later if the user decides to add them, but I'm requiring them to add a 0 since my database has it as option, but I wasn't sure how nodejs would work if I submitted an empty insert statement -->
+
+      <h5> <b>Measurements</b></h5>
+      <h6>Insert measurements in mm into correct fields.</h6>
+      <h6 style="color:blue">Measurements should be in numerical form only, do not include the unit of measurement.</h6>
+      <h6 style="color:blue">If you do not have measurements or the field is not applicable for your garment, please enter a 0.</h6>
+      <h6 style="color:blue">Keep measurements as whole numbers, using mm allows us to be as accurate as possible</h6>
+
+      <img src="https://onlineclosetblob.blob.core.windows.net/online-closet-capstone/Untitled_Artwork 9.png" alt="Guide for measurements" height="400" width="auto"> <br>
+
+
+      <!-- User input item measurements -->
+      <label for="bust">Bust Measurement:</label>
+      <input type="text" id="bust" name="bust" value="<%= data.bust%>" required><br>
+
+      <label for="waist">Waist:</label>
+      <input type="text" id="waist" name="waist" value="<%= data.waist%>" required><br>
+
+      <label for="hip">Hip:</label>
+      <input type="text" id="hip" name="hip" value="<%= data.hip%>" required><br>
+
+      <label for="len">Length:</label>
+      <input type="text" id="len" name="len" value="<%= data.length%>" required><br>
+
+      <label for="arm_opening">Arm Opening:</label>
+      <input type="text" id="arm_opening" name="arm_opening" value="<%= data.arm_opening%>" required><br>
+
+      <label for="leg_opening">Leg Opening:</label>
+      <input type="text" id="leg_opening" name="leg_opening" value="<%= data.leg_opening%>" required><br>
+
+      <label for="inseam">Inseam:</label>
+      <input type="text" id="inseam" name="inseam" value="<%= data.inseam%>" required><br>
+
+      <br>
+      <!-- Tag system -->
+      
+
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    document.getElementById("clothing_type").value = "<%= data.typeNo %>";
+    document.getElementById("gender").value = "<%= data.genderNo %>"; //gender
+    document.getElementById("special_size").value = "<%= data.specialSizingNo %>";
+    document.getElementById("color").value = "<%= data.colorNo %>";
+    document.getElementById("selling").value = "<%= data.selling %>";
+    document.getElementById("buying").value = "<%= data.buying %>";
+
+
+    if("<%=data.subtypeNo%>" < 11){
+        document.getElementByID("clothing_subtype5").value = "<%=data.subtypeNo%>";
+    }
+    else if("<%=data.subtypeNo%>" < 16){
+        document.getElementByID("clothing_subtype4").value = "<%=data.subtypeNo%>";
+    }
+    else if("<%=data.subtypeNo%>" < 20){
+        document.getElementByID("clothing_subtype3").value = "<%=data.subtypeNo%>";
+    }
+    else if("<%=data.subtypeNo%>" < 28){
+        document.getElementByID("clothing_subtype2").value = "<%=data.subtypeNo%>";
+    }
+    else {
+        document.getElementByID("clothing_subtype1").value = "<%=data.subtypeNo%>";
+
+    }
+
+  </script>
+
+  <!-- This is the function for having dependent drop down menus for clothing type and subtype -->
+  <!--https://www.youtube.com/watch?v=QiUcL9SWUsI Used this tutorial-->
+
+  <script type="text/javascript">
+    function enableSubtype(answer) {
+      if (answer.value == 0) {
+        document.getElementById('tops').classList.remove('d-none');
+        document.getElementById('bottoms').classList.add('d-none');
+        document.getElementById('one_piece').classList.add('d-none');
+        document.getElementById('shoes').classList.add('d-none');
+        document.getElementById('accessories').classList.add('d-none');
+
+      }
+      else if (answer.value == 1) {
+        document.getElementById('bottoms').classList.remove('d-none');
+        document.getElementById('tops').classList.add('d-none');
+        document.getElementById('one_piece').classList.add('d-none');
+        document.getElementById('shoes').classList.add('d-none');
+        document.getElementById('accessories').classList.add('d-none');
+
+      }
+      else if (answer.value == 2) {
+        document.getElementById('one_piece').classList.remove('d-none');
+        document.getElementById('tops').classList.add('d-none');
+        document.getElementById('bottoms').classList.add('d-none');
+        document.getElementById('shoes').classList.add('d-none');
+        document.getElementById('accessories').classList.add('d-none');
+      }
+      else if (answer.value == 3) {
+        document.getElementById('shoes').classList.remove('d-none');
+        document.getElementById('tops').classList.add('d-none');
+        document.getElementById('one_piece').classList.add('d-none');
+        document.getElementById('bottoms').classList.add('d-none');
+        document.getElementById('accessories').classList.add('d-none');
+      }
+      else if (answer.value == 4) {
+        document.getElementById('accessories').classList.remove('d-none');
+        document.getElementById('tops').classList.add('d-none');
+        document.getElementById('one_piece').classList.add('d-none');
+        document.getElementById('shoes').classList.add('d-none');
+        document.getElementById('bottoms').classList.add('d-none');
+      }
+
+      else if (answer.value == "sel") {
+        document.getElementById('tops').classList.add('d-none');
+        document.getElementById('bottoms').classList.add('d-none');
+        document.getElementById('one_piece').classList.add('d-none');
+        document.getElementById('shoes').classList.add('d-none');
+        document.getElementById('accessories').classList.add('d-none');
+      }
+    }
+
+  </script>
+            <a href="/view-closet/view-item/<%= data.clothingID %>" onclick="return confirm('By clicking ok, any changes made to the form will not be saved');">
+                <button>Return to View Item</button>
+            </a>
+
+           <button type="submit">Upload</button>
+</form>
+    </body>
+    </html>

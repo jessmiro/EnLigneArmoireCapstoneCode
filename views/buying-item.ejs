@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('header.ejs') %>
+        <title>Buy item</title>
+        <script>
+            // Using flex box - same set up as view closet
+            // we have our columns and our rows, taking up up the entire part of the page though
+            // instead of 50%. This is mainly for the link to not appear on more than one line
+            // we also use a larger image since we can
+        </script>
+        <style>
+             .col-auto{
+                display: block;
+                margin: auto;
+                width: 100%;
+                border: 1px solid #000000;
+            }
+
+            .row{
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0 auto;
+                width: 100%;
+                flex-direction: row;
+                justify-content: center;
+            }  
+
+            
+            img {
+                width: 300px;
+                height: 300px;
+                object-fit: contain;
+            }
+
+            /*.row {
+                display: inline-grid;
+                width:80%;
+                background-color: white;
+                justify-content: center;
+                align-items: center;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .col-auto {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .col-auto img{
+                width: 100%
+            }*/
+
+        </style>
+    </head>
+
+    <body>
+        <!--Basic page to display buying information-->
+        <h1 align="center">Items to Buy</h1>
+        <h6 style="color:red"> If you do not see your item and it's been marked as "Buying" when it was created/updated, the item link and date weren't added. Please do this through the button in "View Closet"</h6>
+        <h6 style="color:blue">Please note that the Delete button here is for deleting the link and date information. Item will remain in closet</h6>
+        <h6 style="color:blue"> If you wish to to delete the item from the closet, please delete through 'View Item' or 'View Closet'</h6> <br>
+        <div class="container">
+            <div class="row">
+            <% if (displayItem.length !== 0) { %>
+                <% displayItem.forEach(function(data, index) { %>
+                    <div class="col-auto">
+                        
+                        <img src="<%= data.image_link %>" alt ="clothing item">
+                        
+                        <p><%= data.title %></p>
+                        <a href="<%= data.link %>"><%= data.link %></a> <br>
+                        
+                        <a href="/view-closet/view-item/<%= data.clothingID %>">
+                            <button>View</button>
+                        </a>
+
+                        <a href="/upload/delete-buying/<%= data.clothingID %>" onclick="return confirm('Are you sure you want to delete this items buying information? It will not delete the item from the main closet');">
+                            <button>Delete</button>
+                        </a>
+                            
+                        </div>
+                    <% }); %>
+
+
+                <% } else { %>
+                <p>No Data Found</p>
+              <% } %>
+            </div>
+
+        </div>
+    </body>
+</html>
